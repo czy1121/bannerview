@@ -15,14 +15,15 @@
 
         <me.reezy.cosmo.bannerview.BannerView
             android:id="@+id/banner"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="200dp"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
 
 
     </LinearLayout>

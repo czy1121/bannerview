@@ -69,11 +69,23 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (aspectRatio > 0f) {
-            val hs = MeasureSpec.makeMeasureSpec((MeasureSpec.getSize(widthMeasureSpec) / aspectRatio).toInt(), MeasureSpec.EXACTLY)
-            super.onMeasure(widthMeasureSpec, hs)
-        } else {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            val wSize = MeasureSpec.getSize(widthMeasureSpec)
+            val wMode = MeasureSpec.getMode(widthMeasureSpec)
+            if (wMode == MeasureSpec.EXACTLY) {
+                val hSize = (wSize.toFloat() / aspectRatio).toInt()
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(hSize, MeasureSpec.EXACTLY))
+                return
+            }
+
+            val hSize = MeasureSpec.getSize(heightMeasureSpec)
+            val hMode = MeasureSpec.getMode(heightMeasureSpec)
+            if (hMode == MeasureSpec.EXACTLY) {
+                val wSize = (hSize.toFloat() * aspectRatio).toInt()
+                super.onMeasure(MeasureSpec.makeMeasureSpec(wSize, MeasureSpec.EXACTLY), heightMeasureSpec)
+                return
+            }
         }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
     override fun requestLayout() {
