@@ -12,15 +12,19 @@ class MainActivity : AppCompatActivity() {
 
 
         val adapter = DemoBannerAdapter()
-        adapter.submitList(listOf("One", "Two", "Three", "Four", "Five", "Six"))
 
         val banner = findViewById<BannerView>(R.id.banner)
 
         banner.indicator = RectangleIndicator(this)
 
-        banner.aspectRatio = 2f
+        banner.aspectRatio = 1f
 
         banner.setup(adapter).bind(this).start()
+
+        banner.postDelayed({
+            adapter.submitList(listOf("One"))//, "Two", "Three", "Four", "Five", "Six"))
+        }, 1000)
+
 
 
 

@@ -3,6 +3,7 @@ package me.reezy.cosmo.bannerview
 import android.content.Context
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -97,8 +98,14 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private val adapterDataObserver = object : AdapterDataObserver() {
         override fun onChanged() {
-            activePosition = 1
-            banner.scrollToPosition(1)
+            val itemCount = banner.adapter?.itemCount ?: 0
+            if (itemCount > 1) {
+                activePosition = 1
+                banner.scrollToPosition(1)
+            } else {
+                activePosition = 0
+                banner.smoothScrollToPosition(0)
+            }
             updateIndicator()
             update()
         }
