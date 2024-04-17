@@ -42,10 +42,12 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     init {
         pager.attachToRecyclerView(banner)
 
+
         banner.layoutManager = BannerLayoutManager(context, LinearLayoutManager.HORIZONTAL, 75f)
         banner.overScrollMode = View.OVER_SCROLL_NEVER
         banner.isNestedScrollingEnabled = false
         banner.clipToPadding = false
+        banner.itemAnimator = null
         banner.setHasFixedSize(true)
         banner.addOnItemTouchListener(onItemTouchListener)
         banner.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -73,16 +75,16 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
             val wSize = MeasureSpec.getSize(widthMeasureSpec)
             val wMode = MeasureSpec.getMode(widthMeasureSpec)
             if (wMode == MeasureSpec.EXACTLY) {
-                val hSize = (wSize.toFloat() / aspectRatio).toInt()
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(hSize, MeasureSpec.EXACTLY))
+                val h = (wSize.toFloat() / aspectRatio).toInt()
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY))
                 return
             }
 
             val hSize = MeasureSpec.getSize(heightMeasureSpec)
             val hMode = MeasureSpec.getMode(heightMeasureSpec)
             if (hMode == MeasureSpec.EXACTLY) {
-                val wSize = (hSize.toFloat() * aspectRatio).toInt()
-                super.onMeasure(MeasureSpec.makeMeasureSpec(wSize, MeasureSpec.EXACTLY), heightMeasureSpec)
+                val w = (hSize.toFloat() * aspectRatio).toInt()
+                super.onMeasure(MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY), heightMeasureSpec)
                 return
             }
         }
@@ -98,14 +100,13 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private val adapterDataObserver = object : AdapterDataObserver() {
         override fun onChanged() {
+
             val itemCount = banner.adapter?.itemCount ?: 0
-            if (itemCount > 1) {
-                activePosition = 1
-                banner.scrollToPosition(1)
-            } else {
-                activePosition = 0
-                banner.smoothScrollToPosition(0)
-            }
+
+            activePosition = if (itemCount > 1) 1 else 0
+
+            banner.smoothScrollToPosition(activePosition)
+
             updateIndicator()
             update()
         }
@@ -114,7 +115,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private val runnable: Runnable = object : Runnable {
         override fun run() {
             if (isRunning) {
-                activePosition++
+                activePosition += 1
                 banner.smoothScrollToPosition(activePosition)
                 postDelayed(this, interval)
             }
@@ -136,7 +137,10 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
             val view = value.indicatorView
             if (view.parent == null) {
-                addView(view, value.style.generateLayoutParams())
+                val width = view.layoutParams?.width ?: LayoutParams.WRAP_CONTENT
+                val height = view.layoutParams?.height ?: LayoutParams.WRAP_CONTENT
+
+                addView(view, value.style.generateLayoutParams(width, height))
             }
             updateIndicator()
         }
@@ -150,7 +154,6 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         if (banner.adapter != adapter) {
             banner.adapter?.unregisterAdapterDataObserver(adapterDataObserver)
             banner.adapter = adapter
-            banner.scrollToPosition(activePosition)
             adapter.registerAdapterDataObserver(adapterDataObserver)
             updateIndicator()
         }
@@ -179,17 +182,17 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private fun update() {
-        val itemCount = banner.adapter?.itemCount ?: return
-        if (itemCount <= 1) return
-        val running = isVisible && isStarted && !isPaused && !isDragging
+        val itemCount = banner.adapter?.itemCount ?: 0
+        val running = itemCount > 1 && isVisible && isStarted && !isPaused && !isDragging
 //        Log.e("OoO", "$running = $isVisible && $isStarted && !$isPaused && !$isDragging, $isRunning, $childCount")
         if (running != isRunning) {
+            isRunning = running
+            Log.e("OoO.banner", "running = $running")
             if (running) {
                 postDelayed(runnable, interval)
             } else {
                 removeCallbacks(runnable)
             }
-            isRunning = running
         }
     }
 
@@ -208,6 +211,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 isDragging = true
                 update()
             }
+
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isDragging = false
                 update()
@@ -221,6 +225,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         isVisible = true
         update()
     }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         isVisible = false
@@ -252,10 +257,12 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 activePosition = itemCount - 2
                 scrollToPosition(activePosition)
             }
+
             itemCount - 1 -> {
                 activePosition = 1
                 scrollToPosition(activePosition)
             }
+
             else -> {}
         }
         updateIndicator()
@@ -279,12 +286,17 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
             val setTouchable = this.setParentTouchableListener ?: return false
 
+            // 只有一个时不请求父级禁止拦截
+            if ((rv.layoutManager?.itemCount ?: 0) <= 1)  {
+                return false
+            }
             when (e.action) {
                 MotionEvent.ACTION_DOWN -> {
                     lastX = e.x
                     lastY = e.y
                     setTouchable(false)
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val deltaX = e.x - lastX
                     val deltaY = e.y - lastY
@@ -295,7 +307,11 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                     lastX = e.x
                     lastY = e.y
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    if (isMoving) {
+                        e.action = MotionEvent.ACTION_CANCEL
+                    }
                     setTouchable(true)
                     isMoving = false
                     lastX = 0f

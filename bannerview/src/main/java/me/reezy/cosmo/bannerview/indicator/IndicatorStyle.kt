@@ -2,7 +2,7 @@ package me.reezy.cosmo.bannerview.indicator
 
 import android.content.res.Resources
 import android.graphics.Rect
-import android.widget.FrameLayout
+import android.widget.FrameLayout.LayoutParams
 import androidx.annotation.ColorInt
 import androidx.annotation.IntDef
 
@@ -21,11 +21,11 @@ class IndicatorStyle {
         private set
 
     @ColorInt
-    var normalColor: Int = (0x88ffffff).toInt()
+    var normalColor: Int = (0x80ffffff).toInt()
         private set
 
     @ColorInt
-    var activeColor: Int = (0x88000000).toInt()
+    var activeColor: Int = (0x80000000).toInt()
         private set
 
     var margins: Rect = Rect(5.dp, 5.dp, 5.dp, 5.dp)
@@ -71,9 +71,9 @@ class IndicatorStyle {
         return this
     }
 
-    fun generateLayoutParams(): FrameLayout.LayoutParams {
+    fun generateLayoutParams(width: Int = LayoutParams.WRAP_CONTENT, height: Int = LayoutParams.WRAP_CONTENT): LayoutParams {
 
-        val layoutParams: FrameLayout.LayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        val layoutParams = LayoutParams(width, height)
         when (gravity) {
             Gravity.START -> layoutParams.gravity = android.view.Gravity.BOTTOM or android.view.Gravity.START
             Gravity.CENTER -> layoutParams.gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL

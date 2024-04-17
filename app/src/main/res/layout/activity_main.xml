@@ -16,13 +16,7 @@
         <me.reezy.cosmo.bannerview.BannerView
             android:id="@+id/banner"
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
-
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/rv"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="200dp"-->
-<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
+            android:layout_height="340dp"/>
 
 
     </LinearLayout>
