@@ -8,12 +8,12 @@ class RoundLineIndicator @JvmOverloads constructor(context: Context, attrs: Attr
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (itemCount <= 1) return
-        setMeasuredDimension(itemCount * style.activeWidth, style.height)
+        if (count <= 1) return
+        setMeasuredDimension(count * style.activeWidth, style.height)
     }
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (itemCount <= 1) return
+        if (count <= 1) return
 
         val radius = style.radius.toFloat()
         val height = style.height.toFloat()
@@ -22,7 +22,7 @@ class RoundLineIndicator @JvmOverloads constructor(context: Context, attrs: Attr
         canvas.drawRoundRect(0f, 0f, width.toFloat(), height, radius, radius, paint)
 
         paint.color = style.activeColor
-        val left = activePosition * style.activeWidth.toFloat()
+        val left = active * style.activeWidth.toFloat()
         val right = left + style.activeWidth.toFloat()
         canvas.drawRoundRect(left, 0f, right, height, radius, radius, paint)
     }

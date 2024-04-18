@@ -28,9 +28,6 @@ class IndicatorStyle {
     var activeColor: Int = (0x80000000).toInt()
         private set
 
-    var margins: Rect = Rect(5.dp, 5.dp, 5.dp, 5.dp)
-        private set
-
     fun setNormalColor(normalColor: Int): IndicatorStyle {
         this.normalColor = normalColor
         return this
@@ -69,22 +66,6 @@ class IndicatorStyle {
     fun setRadius(radius: Int): IndicatorStyle {
         this.radius = radius
         return this
-    }
-
-    fun generateLayoutParams(width: Int = LayoutParams.WRAP_CONTENT, height: Int = LayoutParams.WRAP_CONTENT): LayoutParams {
-
-        val layoutParams = LayoutParams(width, height)
-        when (gravity) {
-            Gravity.START -> layoutParams.gravity = android.view.Gravity.BOTTOM or android.view.Gravity.START
-            Gravity.CENTER -> layoutParams.gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL
-            Gravity.END -> layoutParams.gravity = android.view.Gravity.BOTTOM or android.view.Gravity.END
-        }
-        layoutParams.leftMargin = margins.left
-        layoutParams.rightMargin = margins.right
-        layoutParams.topMargin = margins.top
-        layoutParams.bottomMargin = margins.bottom
-
-        return layoutParams
     }
 
 
