@@ -1,64 +1,61 @@
 package me.reezy.cosmo.bannerview.indicator
 
 import android.content.res.Resources
-import android.graphics.Rect
-import android.widget.FrameLayout.LayoutParams
 import androidx.annotation.ColorInt
-import androidx.annotation.IntDef
 
 class IndicatorStyle {
-    var gravity = Gravity.CENTER
+    var gap: Int = 5.dp
         private set
-    var space: Int = 5.dp
-        private set
-    var height: Int = 3.dp
-        private set
-    var normalWidth: Int = 5.dp
-        private set
-    var activeWidth: Int = 7.dp
-        private set
+
     var radius: Int = 3.dp
         private set
 
+    var width: Int = 5.dp
+        private set
+    var activeWidth: Int = 7.dp
+        private set
+
+
+    var height: Int = 3.dp
+        private set
+    var activeHeight: Int = 7.dp
+        private set
+
     @ColorInt
-    var normalColor: Int = (0x80ffffff).toInt()
+    var color: Int = (0x80ffffff).toInt()
         private set
 
     @ColorInt
     var activeColor: Int = (0x80000000).toInt()
         private set
 
-    fun setNormalColor(normalColor: Int): IndicatorStyle {
-        this.normalColor = normalColor
+    fun setColor(color: Int, activeColor: Int = color): IndicatorStyle {
+        this.color = color
+        this.activeColor = activeColor
         return this
     }
 
-    fun setActiveColor(selectedColor: Int): IndicatorStyle {
-        this.activeColor = selectedColor
+    fun setGap(gap: Int): IndicatorStyle {
+        this.gap = gap
         return this
     }
 
-    fun setGravity(@Gravity gravity: Int): IndicatorStyle {
-        this.gravity = gravity
+    fun setSize(size: Int, activeSize: Int = size): IndicatorStyle {
+        this.width = size
+        this.height = size
+        this.activeWidth = activeSize
+        this.activeHeight = activeSize
         return this
     }
 
-    fun setSpace(indicatorSpace: Int): IndicatorStyle {
-        this.space = indicatorSpace
-        return this
-    }
-
-    fun setHeight(height: Int): IndicatorStyle {
+    fun setHeight(height: Int, activeHeight: Int = height): IndicatorStyle {
         this.height = height
+        this.activeHeight = activeHeight
         return this
     }
 
-    fun setNormalWidth(normalWidth: Int): IndicatorStyle {
-        this.normalWidth = normalWidth
-        return this
-    }
-
-    fun setActiveWidth(activeWidth: Int): IndicatorStyle {
+    fun setWidth(width: Int, activeWidth: Int = width): IndicatorStyle {
+        this.width = activeWidth
         this.activeWidth = activeWidth
         return this
     }
@@ -66,17 +63,6 @@ class IndicatorStyle {
     fun setRadius(radius: Int): IndicatorStyle {
         this.radius = radius
         return this
-    }
-
-
-    @IntDef(Gravity.START, Gravity.CENTER, Gravity.END)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class Gravity {
-        companion object {
-            const val START = 0
-            const val CENTER = 1
-            const val END = 2
-        }
     }
 
     companion object {

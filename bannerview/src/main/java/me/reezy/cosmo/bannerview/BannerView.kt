@@ -58,6 +58,10 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                     else -> {}
                 }
             }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+            }
         })
 
         addView(banner, 0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
@@ -124,6 +128,11 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         setOnActiveChangedListener { position, count ->
             indicator.update(position, count)
         }
+        return this
+    }
+
+    fun setInterval(value: Long): BannerView {
+        interval = value
         return this
     }
 

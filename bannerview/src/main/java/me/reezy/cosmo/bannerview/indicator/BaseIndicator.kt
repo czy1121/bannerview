@@ -8,7 +8,13 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.setMargins
 
+
+/**
+ * transition: none/scale/pan/warm/color
+ * */
 abstract class BaseIndicator @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+
+
 
     val style: IndicatorStyle = IndicatorStyle()
 
@@ -21,7 +27,7 @@ abstract class BaseIndicator @JvmOverloads constructor(context: Context, attrs: 
         private set
 
     init {
-        paint.color = style.normalColor
+        paint.color = style.color
 
         val lp = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
         lp.setMargins((resources.displayMetrics.density * 20).toInt())

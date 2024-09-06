@@ -10,7 +10,7 @@ class RectangleIndicator @JvmOverloads constructor(context: Context, attrs: Attr
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         if (count <= 1) return
-        setMeasuredDimension((count - 1) * (style.space + style.normalWidth) + style.activeWidth, style.height)
+        setMeasuredDimension((count - 1) * (style.gap + style.width) + style.activeWidth, style.height)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -19,13 +19,13 @@ class RectangleIndicator @JvmOverloads constructor(context: Context, attrs: Attr
         val r = style.radius.toFloat()
         var left = 0f
         for (i in 0 until count) {
-            paint.color = if (active == i) style.activeColor else style.normalColor
+            paint.color = if (active == i) style.activeColor else style.color
 
-            val itemWidth = if (active == i) style.activeWidth else style.normalWidth
+            val itemWidth = if (active == i) style.activeWidth else style.width
 
             canvas.drawRoundRect(left, 0f, left + itemWidth, style.height.toFloat(), r, r, paint)
 
-            left += itemWidth + style.space
+            left += itemWidth + style.gap
         }
     }
 }

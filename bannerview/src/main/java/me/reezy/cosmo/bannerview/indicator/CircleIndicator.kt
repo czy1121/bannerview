@@ -18,12 +18,12 @@ class CircleIndicator @JvmOverloads constructor(context: Context, attrs: Attribu
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         if (count <= 1) return
 
-        normalRadius = style.normalWidth / 2f
+        normalRadius = style.width / 2f
         activeRadius = style.activeWidth / 2f
         centerY = max(activeRadius, normalRadius)
 
-        val width: Int = (count - 1) * (style.space + style.normalWidth) + style.activeWidth
-        setMeasuredDimension(width, max(style.normalWidth, style.activeWidth))
+        val width: Int = (count - 1) * (style.gap + style.width) + style.activeWidth
+        setMeasuredDimension(width, max(style.width, style.activeWidth))
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -32,13 +32,13 @@ class CircleIndicator @JvmOverloads constructor(context: Context, attrs: Attribu
 
         var left = 0f
         for (i in 0 until count) {
-            paint.color = if (active == i) style.activeColor else style.normalColor
+            paint.color = if (active == i) style.activeColor else style.color
 
-            val width: Int = if (active == i) style.activeWidth else style.normalWidth
+            val width: Int = if (active == i) style.activeWidth else style.width
             val radius = if (active == i) activeRadius else normalRadius
             canvas.drawCircle(left + radius, centerY, radius, paint)
 
-            left += width + style.space
+            left += width + style.gap
         }
     }
 }

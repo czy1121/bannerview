@@ -18,7 +18,7 @@ class RoundLineIndicator @JvmOverloads constructor(context: Context, attrs: Attr
         val radius = style.radius.toFloat()
         val height = style.height.toFloat()
 
-        paint.color = style.normalColor
+        paint.color = style.color
         canvas.drawRoundRect(0f, 0f, width.toFloat(), height, radius, radius, paint)
 
         paint.color = style.activeColor
