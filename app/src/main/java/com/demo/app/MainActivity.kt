@@ -1,36 +1,20 @@
 package com.demo.app
 
-import android.graphics.Color
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import me.reezy.cosmo.bannerview.BannerView
-import me.reezy.cosmo.bannerview.indicator.RectangleIndicator
+import com.demo.app.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private val adapter = DemoBannerAdapter()
-
-//    private val adapter = object : ImageBannerAdapter<String>() {
-//        override fun onBind(view: ImageView, item: String) {
-//            view.load(item)
-//        }
-//    }
+    private val binding by lazy { ActivityMainBinding.bind((findViewById<ViewGroup>(android.R.id.content)).getChildAt(0)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        binding.banner.setAdapter(BannerAdapter()).bind(this).start()
 
-
-        val banner = findViewById<BannerView>(R.id.banner)
-        banner.setBackgroundColor(Color.RED)
-
-        banner.setIndicator(RectangleIndicator(this))
-
-        banner.setup(adapter).bind(this).start()
-
-
-        adapter.submitList(listOf("One", "Two", "Three", "Four", "Five", "Six"))
+        binding.banner.setData(listOf("One", "Two", "Three", "Four", "Five", "Six"))
 
     }
 }
